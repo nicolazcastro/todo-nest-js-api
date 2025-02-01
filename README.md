@@ -1,99 +1,343 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Todo NestJS API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+![NestJS Logo](https://nestjs.com/img/logo_text.svg)
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Todo NestJS API** is a RESTful API template built with [NestJS](https://nestjs.com/), designed to manage tasks (ToDos) with advanced features such as:
 
-## Project setup
+- **Basic JWT Authentication:**  
+  - Allows users to register and log in.
+  - Protects routes using JWT tokens generated with `jsonwebtoken`.
+
+- **MongoDB Integration:**  
+  - Uses [MongoDB](https://www.mongodb.com/) as the database, managed through [Mongoose](https://mongoosejs.com/).
+
+- **External API Consumption:**  
+  - Each ToDo item fetches a random piece of advice from a public external API (the [Advice Slip API](https://api.adviceslip.com/)) to enrich user experience.
+
+- **Unit Testing:**  
+  - Implements isolated unit tests for controllers and services using [Jest](https://jestjs.io/).
+  - Uses mocks to isolate components during testing.
+
+This template serves as a solid foundation for future projects, providing a modular, scalable, and maintainable structure.
+
+## Table of Contents
+
+- [Features](#features)
+- [Technologies](#technologies)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+  - [Prerequisites](#prerequisites)
+  - [Clone the Repository](#clone-the-repository)
+  - [Configure Environment Variables](#configure-environment-variables)
+  - [Install Dependencies](#install-dependencies)
+  - [Run the Application](#run-the-application)
+- [Usage](#usage)
+  - [API Endpoints](#api-endpoints)
+- [External API Integration](#external-api-integration)
+- [Testing](#testing)
+  - [Run Unit Tests](#run-unit-tests)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- **JWT Authentication:**
+  - User registration.
+  - User login and JWT token generation.
+  - Route protection using guards.
+
+- **ToDo Management:**
+  - Create, read, update, and delete tasks.
+  - Associate each ToDo with a random piece of advice fetched from an external API.
+
+- **External API Consumption:**
+  - Integration with the Advice Slip API to fetch random advice (no authentication required).
+
+- **Unit Testing:**
+  - Comprehensive unit tests for controllers and services.
+  - Utilizes mocks to isolate components during testing.
+
+## Technologies
+
+- **Backend:**
+  - [NestJS](https://nestjs.com/)
+  - [TypeScript](https://www.typescriptlang.org/)
+  - [MongoDB](https://www.mongodb.com/)
+  - [Mongoose](https://mongoosejs.com/)
+  - [JWT](https://jwt.io/)
+  - [Axios](https://axios-http.com/) (for external API requests)
+
+- **Testing:**
+  - [Jest](https://jestjs.io/)
+
+## Project Structure
+
+todo-nest-js-api/
+├── src/
+│   ├── app.module.ts
+│   ├── main.ts
+│   ├── config/
+│   │   └── database.config.ts
+│   ├── modules/
+│   │   ├── auth/
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── dto/
+│   │   │   │   ├── create-user.dto.ts
+│   │   │   │   └── login-user.dto.ts
+│   │   │   ├── schemas/
+│   │   │   │   └── user.schema.ts
+│   │   │   └── auth.module.ts
+│   │   ├── todos/
+│   │   │   ├── todos.controller.ts
+│   │   │   ├── todos.service.ts
+│   │   │   ├── dto/
+│   │   │   │   ├── create-todo.dto.ts
+│   │   │   │   └── update-todo.dto.ts
+│   │   │   ├── schemas/
+│   │   │   │   └── todo.schema.ts
+│   │   │   └── todos.module.ts
+│   │   └── external-apis/
+│   │       ├── advice/
+│   │       │   ├── advice.service.ts
+│   │       │   └── advice.module.ts
+│   ├── common/
+│   │   ├── guards/
+│   │   │   └── jwt-auth.guard.ts
+│   │   └── filters/
+│   │       └── http-exception.filter.ts
+│   └── tests/
+│       ├── auth/
+│       │   └── auth.service.spec.ts
+│       ├── todos/
+│       │   └── todos.service.spec.ts
+│       └── external-apis/
+│           └── advice/
+│               └── advice.service.spec.ts
+├── .env
+├── .gitignore
+├── README.md
+├── package.json
+├── tsconfig.json
+└── jest.config.js
+
+### **Description of Folders and Files**
+
+- **`src/`**: Contains all source code of the application.
+  - **`app.module.ts`**: Root module that imports and configures other modules.
+  - **`main.ts`**: Entry point where the NestJS server is started.
+  - **`config/`**: Contains global configuration files.
+    - **`database.config.ts`**: Configuration for connecting to MongoDB.
+  - **`modules/`**: Contains functional modules.
+    - **`auth/`**: Handles user authentication.
+      - **`auth.controller.ts`**: Controller for authentication routes.
+      - **`auth.service.ts`**: Business logic for authentication.
+      - **`dto/`**: Data Transfer Objects for authentication.
+        - **`create-user.dto.ts`** and **`login-user.dto.ts`**
+      - **`schemas/`**: Mongoose schema for the User model.
+      - **`auth.module.ts`**: Defines the Auth module.
+    - **`todos/`**: Manages ToDo operations.
+      - **`todos.controller.ts`**: Controller for ToDo routes.
+      - **`todos.service.ts`**: Business logic for ToDo operations.
+      - **`dto/`**: DTOs for ToDo operations.
+        - **`create-todo.dto.ts`** and **`update-todo.dto.ts`**
+      - **`schemas/`**: Mongoose schema for the ToDo model.
+      - **`todos.module.ts`**: Defines the ToDo module.
+    - **`external-apis/`**: Manages external API integrations.
+      - **`advice/`**: Integration with the Advice Slip API.
+        - **`advice.service.ts`**: Service for fetching random advice.
+        - **`advice.module.ts`**: Defines the Advice module.
+  - **`common/`**: Contains reusable components.
+    - **`guards/`**: Contains JWT authentication guard.
+      - **`jwt-auth.guard.ts`**
+    - **`filters/`**: Contains global HTTP exception filters.
+      - **`http-exception.filter.ts`**
+  - **`tests/`**: Contains unit tests for each module.
+    - **`auth/`**, **`todos/`**, **`external-apis/advice/`**
+
+- **`.env`**: File containing environment variables (not committed to version control).
+- **`.gitignore`**: Specifies files and directories to ignore in version control.
+- **`README.md`**: Project documentation (this file).
+- **`package.json`**: Manages project dependencies and scripts.
+- **`tsconfig.json`**: TypeScript configuration.
+- **`jest.config.js`**: Jest configuration for testing.
+
+---
+
+## Installation
+
+### Prerequisites
+
+Before you begin, ensure you have the following installed on your system:
+
+- **[Node.js](https://nodejs.org/) (v14 or higher)**
+- **[npm](https://www.npmjs.com/) or [Yarn](https://yarnpkg.com/)**
+- **[MongoDB](https://www.mongodb.com/)** (running locally)
+
+### Clone the Repository
+
+Clone the repository to your local machine (replace `<YOUR_TOKEN>` with your GitHub token if needed):
 
 ```bash
-$ npm install
-```
+git clone https://<YOUR_TOKEN>@github.com/<YOUR_GITHUB_USERNAME>/todo-nest-js-api.git
 
-## Compile and run the project
+Security Note: Use secure methods (e.g., SSH) when possible. Do not expose your token publicly.
 
-```bash
-# development
-$ npm run start
+Configure Environment Variables
+	1.	Create the .env File:
+    In the root directory, create a .env file:
 
-# watch mode
-$ npm run start:dev
+    touch .env
 
-# production mode
-$ npm run start:prod
-```
+  2.	Add the Following Variables:
+    PORT=3000
+    JWT_SECRET=your_jwt_secret_key_here
+    JWT_EXPIRATION=3600s
+    MONGODB_URI=mongodb://localhost:27017/todo-nest-js-api
+    ADVICE_API_URL=https://api.adviceslip.com/advice
 
-## Run tests
+    Replace your_jwt_secret_key_here with a strong, unique key.
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
+Install Dependencies
 
-# test coverage
-$ npm run test:cov
-```
+  Navigate to the project directory and install dependencies:
 
-## Deployment
+  npm install
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Run the Application
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+  Development Mode (with Hot Reload)
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+  npm run start:dev
 
-## Resources
+  This command uses nodemon for hot-reloading. Your server will run on the port specified in .env (default is 3000).
 
-Check out a few resources that may come in handy when working with NestJS:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Production Mode
+	
+  1.	Build the Project:
 
-## Support
+    npm run build
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  2.	Start the Application:
 
-## Stay in touch
+    npm run start:prod
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+Usage
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+API Endpoints
+
+  Authentication
+
+    •	User Registration
+      •	URL: /auth/register
+      •	Method: POST
+      •	Body:
+              {
+                "username": "exampleUser",
+                "password": "securePassword"
+              }
+
+      •	Description: Registers a new user.
+
+   	•	User Login
+      •	URL: /auth/login
+      •	Method: POST
+      •	Body: 
+              {
+                "username": "exampleUser",
+                "password": "securePassword"
+              }
+      
+      •	Description: Authenticates the user and returns a JWT token.
+
+
+  ToDo Management
+
+    Note: All ToDo endpoints require authentication. Include the JWT token in the Authorization header as Bearer <token>.
+
+    •	Create a ToDo
+      •	URL: /todos
+      •	Method: POST
+      •	Body:  
+              {
+                "title": "Buy milk",
+                "description": "Milk, Bread, Eggs"
+              }
+
+     •	Description: Creates a new task and associates a random piece of advice fetched from the external API. 
+
+
+    •	Get All ToDos
+      •	URL: /todos
+      •	Method: GET
+      •	Description: Retrieves all tasks for the authenticated user, sorted by creation date (descending).
+      •	Get a Specific ToDo
+      •	URL: /todos/:id
+      •	Method: GET
+
+      •	Description: Retrieves a task by its ID.
+
+    •	Update a ToDo
+      •	URL: /todos/:id
+      •	Method: PUT
+      •	Body:
+              {
+                "title": "Buy bread",
+                "description": "Whole grain bread"
+              }
+      •	Description: Updates the title and/or description of a specific task.
+      
+    •	Delete a ToDo
+      •	URL: /todos/:id
+      •	Method: DELETE
+      
+      •	Description: Deletes a specific task.
+
+External API Integration
+
+    Advice Slip API
+      •	Purpose:
+        The external API is used to fetch a random piece of advice which is automatically attached to each new ToDo item.
+          •	How It Works:
+          •	When a ToDo is created, the TodosService calls the AdviceService.
+          •	The AdviceService makes an HTTP GET request to the Advice Slip API.
+          •	The retrieved advice is stored in the advice field of the ToDo document.
+
+Testing
+
+  Run Unit Tests
+
+  This project uses Jest for unit testing. Tests are located in the src/tests/ directory and ensure that controllers and services function correctly in isolation using mocks.
+
+  Execute All Tests
+    npm run test
+
+  Run Tests in Watch Mode
+    npm run test:watch
+
+  Generate Coverage Report
+    npm run test:cov
+
+
+Contributing
+
+Contributions are welcome! If you’d like to contribute, follow these steps:
+	1.	Fork the Repository
+	2.	Create a Feature Branch (e.g., feature/YourFeature)
+	3.	Commit Your Changes
+	4.	Push to Your Fork
+	5.	Open a Pull Request
+
+Please adhere to the project’s coding standards and include appropriate tests for any new features.
+
+License
+
+This project is licensed under the MIT License.
+
+Thank you for using Todo NestJS API! If you have any questions or need assistance, feel free to open an issue or contact the project maintainer.
