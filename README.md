@@ -180,7 +180,6 @@ Before you begin, ensure you have the following installed on your system:
 
 Clone the repository to your local machine (replace `<YOUR_TOKEN>` with your GitHub token if needed):
 
-```bash
 git clone https://<YOUR_TOKEN>@github.com/<YOUR_GITHUB_USERNAME>/todo-nest-js-api.git
 
 Security Note: Use secure methods (e.g., SSH) when possible. Do not expose your token publicly.
