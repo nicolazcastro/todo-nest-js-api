@@ -1,59 +1,44 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AdviceService } from '../../../modules/external-apis/advice/advice.service';
 import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 import { of } from 'rxjs';
-import { AxiosResponse, InternalAxiosRequestConfig, AxiosHeaders } from 'axios';
 
 describe('AdviceService', () => {
   let service: AdviceService;
-  let httpService: HttpService;
+
+  // Create mock objects for HttpService and ConfigService
+  const mockHttpService = {
+    get: jest.fn(),
+  };
+  const mockConfigService = {
+    get: jest.fn().mockReturnValue('https://api.adviceslip.com/advice'),
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AdviceService,
-        {
-          provide: HttpService,
-          useValue: {
-            get: jest.fn(),
-          },
-        },
+        { provide: HttpService, useValue: mockHttpService },
+        { provide: ConfigService, useValue: mockConfigService },
       ],
     }).compile();
 
     service = module.get<AdviceService>(AdviceService);
-    httpService = module.get<HttpService>(HttpService);
+  });
+
+  it('should be defined', () => {
+    expect(service).toBeDefined();
   });
 
   it('should fetch advice', async () => {
-    const advice = { slip: { advice: 'Always be learning.' } };
+    // Prepare a fake response that simulates the API returning advice.
+    const fakeAdvice = { slip: { advice: 'Always check your groceries!' } };
+    // Set the HttpService.get() method to return an Observable that emits the fake response.
+    mockHttpService.get.mockReturnValue(of({ data: fakeAdvice }));
 
-    // Mock AxiosHeaders
-    const mockHeaders = new AxiosHeaders();
-
-    // Mock InternalAxiosRequestConfig with valid headers
-    const mockConfig: InternalAxiosRequestConfig = {
-      url: '',
-      method: 'get',
-      headers: mockHeaders, // Use AxiosHeaders instance
-      params: {},
-      transformRequest: [],
-      transformResponse: [],
-      timeout: 0,
-    };
-
-    // Mock AxiosResponse object with proper types
-    const axiosResponse: AxiosResponse = {
-      data: advice,
-      status: 200,
-      statusText: 'OK',
-      headers: mockHeaders,
-      config: mockConfig,
-    };
-
-    jest.spyOn(httpService, 'get').mockReturnValue(of(axiosResponse));
-
-    const result: string = await service.getAdvice();
-    expect(result).toBe('Always be learning.');
+    // Call getAdvice() and expect it to resolve to the advice string.
+    const advice = await service.getAdvice();
+    expect(advice).toEqual('Always check your groceries!');
   });
 });

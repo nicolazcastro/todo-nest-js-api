@@ -1,3 +1,7 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Injectable,
   BadRequestException,
@@ -31,11 +35,9 @@ export class AuthService {
     // Hash password
     let hashedPassword: string;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
       hashedPassword = await bcrypt.hash(password, 10);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
-      throw new BadRequestException('Error hashing password');
+      throw new BadRequestException(`Error hashing password ${JSON.stringify(error.message)}`);
     }
 
     // Create and save the new user
@@ -61,7 +63,7 @@ export class AuthService {
     // Compare passwords
     let passwordValid: boolean;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unused-vars, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       passwordValid = await bcrypt.compare(password, user.password);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
