@@ -23,3 +23,4 @@ export class ToDo {
 }
 
 export const ToDoSchema = SchemaFactory.createForClass(ToDo);
+ToDoSchema.index({ user: 1 });

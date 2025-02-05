@@ -1,7 +1,5 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Injectable,
   BadRequestException,
@@ -63,11 +61,16 @@ export class AuthService {
     // Compare passwords
     let passwordValid: boolean;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+       
       passwordValid = await bcrypt.compare(password, user.password);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       throw new UnauthorizedException('Error comparing passwords');
+    }
+
+    // If password is invalid, throw UnauthorizedException
+    if (!passwordValid) {
+      throw new UnauthorizedException('Invalid credentials');
     }
 
     // Generate JWT token
